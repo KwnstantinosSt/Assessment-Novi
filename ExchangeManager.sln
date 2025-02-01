@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "microservices", "microservices", "{28A82A67-39F2-46D7-A8CD-E8DE4927BDD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency.Exchange", "microservices\Currency.Exchange\Currency.Exchange.csproj", "{D8CBC036-86A7-421D-8CA9-323D71C5607A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{59D29FB2-B141-4FA0-8CBE-C8E2E8ADB323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency.Exchange.Common", "common\Currency.Exchange.Common\Currency.Exchange.Common.csproj", "{80B7206A-AF0E-4026-8D38-8F1CE47F77FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency.Exchange.Gateway", "common\Currency.Exchange.Gateway\Currency.Exchange.Gateway.csproj", "{46CFA84B-69D5-49E0-93BE-7ECB37ACE220}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency.Exchange.UnitTests", "microservices\Currency.Exchange.UnitTests\Currency.Exchange.UnitTests.csproj", "{FB3B26DF-0813-4182-9A8F-3261C30BA4BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8CBC036-86A7-421D-8CA9-323D71C5607A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CBC036-86A7-421D-8CA9-323D71C5607A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CBC036-86A7-421D-8CA9-323D71C5607A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CBC036-86A7-421D-8CA9-323D71C5607A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B7206A-AF0E-4026-8D38-8F1CE47F77FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B7206A-AF0E-4026-8D38-8F1CE47F77FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B7206A-AF0E-4026-8D38-8F1CE47F77FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B7206A-AF0E-4026-8D38-8F1CE47F77FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CFA84B-69D5-49E0-93BE-7ECB37ACE220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CFA84B-69D5-49E0-93BE-7ECB37ACE220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CFA84B-69D5-49E0-93BE-7ECB37ACE220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CFA84B-69D5-49E0-93BE-7ECB37ACE220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB3B26DF-0813-4182-9A8F-3261C30BA4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB3B26DF-0813-4182-9A8F-3261C30BA4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB3B26DF-0813-4182-9A8F-3261C30BA4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB3B26DF-0813-4182-9A8F-3261C30BA4BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D8CBC036-86A7-421D-8CA9-323D71C5607A} = {28A82A67-39F2-46D7-A8CD-E8DE4927BDD7}
+		{80B7206A-AF0E-4026-8D38-8F1CE47F77FD} = {59D29FB2-B141-4FA0-8CBE-C8E2E8ADB323}
+		{46CFA84B-69D5-49E0-93BE-7ECB37ACE220} = {59D29FB2-B141-4FA0-8CBE-C8E2E8ADB323}
+		{FB3B26DF-0813-4182-9A8F-3261C30BA4BF} = {28A82A67-39F2-46D7-A8CD-E8DE4927BDD7}
+	EndGlobalSection
+EndGlobal
