@@ -3,11 +3,14 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Currency.Exchange.Common.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using StackExchange.Redis;
 
 namespace Currency.Exchange.Common.Microservices;
 
@@ -27,6 +30,15 @@ public static class ConfigurationExtensions
                 optional: true,
                 reloadOnChange: true)
             .AddEnvironmentVariables();
+
+        builder.Services.AddSingleton<IConnectionMultiplexer>(
+            implementationInstance: ConnectionMultiplexer.Connect(
+                configuration: builder.Configuration.GetConnectionString(name: "Redis")!));
+
+        builder.Services.AddDbContext<CurrencyExchangeDbcontext>(options =>
+            options.UseNpgsql(connectionString: builder.Configuration.GetConnectionString(name: "Postgres"),
+                x => x.MigrationsHistoryTable(tableName: "migrations_history",
+                    schema: builder.Configuration.GetConnectionString(name: "Schema"))));
 
         builder.Services.AddOpenApi();
         builder.Services.AddHealthChecks();

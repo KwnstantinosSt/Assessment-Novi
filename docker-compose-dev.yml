@@ -1,0 +1,21 @@
+services:
+
+    db:
+        image: postgres:12.1
+        container_name: currency_exchange_db
+        ports:
+            - "4699:5432"
+        networks:
+            - currencyExchange
+
+    redis:
+        container_name: currency_exchange_redis
+        image: redis:5.0.7
+        networks:
+            - currencyExchange
+        ports:
+            - "8537:6379"
+
+
+networks:
+    currencyExchange:
