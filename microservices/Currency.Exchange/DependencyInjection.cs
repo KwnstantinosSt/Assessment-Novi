@@ -1,6 +1,12 @@
 // Copyright © 2025 Konstantinos Stougiannou
 
 using Currency.Exchange.Common.ValidationFactory;
+using Currency.Exchange.Features.Wallets.CreateWallet;
+using Currency.Exchange.Features.Wallets.EditWalletBalance;
+using Currency.Exchange.Features.Wallets.GetWalletBalance;
+using Currency.Exchange.Gateway.Configuration;
+using Currency.Exchange.Gateway.EuropeanCentralBankClient;
+using Currency.Exchange.Gateway.GatewayBaseClient;
 using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -10,6 +16,12 @@ public static class DependencyInjection
 {
     public static void AddDependencies(this IServiceCollection services, IConfiguration configuration)
     {
+        // Register gateway client and europeanCentralBankClient
+        var client = services.AddGatewayClient();
+        client.Services.AddTransient<IEuropeanCentralBankClient, EuropeanCentralBankClient>();
+        // register configuration of europeanCentralBankClient
+        client.Services.Configure<GatewayClientConfiguration>(config: configuration.GetSection(key: "GatewayClientBaseUrl"));
+
         // Register fluentValidation with custom result factory to format api responses
         services.AddFluentValidationAutoValidation(conf =>
         {
@@ -17,7 +29,9 @@ public static class DependencyInjection
         });
 
         // Register fluent validators
-        // services.AddValidatorsFromAssemblyContaining<UserTokenValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateWalletValidator>();
+        services.AddValidatorsFromAssemblyContaining<EditWalletBalanceValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetWalletBalanceValidator>();
 
         // Resister services
     }

@@ -16,8 +16,9 @@ public class CurrencyExchangeDbcontext : DbContext
         _schema = configuration.GetConnectionString(name: "Schema");
     }
 
-    // Database tables
-    // public DbSet<Project> Projects { get; set; } = null!;
+     // Database tables
+     public DbSet<Wallet> Wallets { get; set; } = null!;
+     public DbSet<Models.Currency> Currencies { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +44,7 @@ public class CurrencyExchangeDbcontext : DbContext
         {
             if (entityEntry.State == EntityState.Added)
             {
+                ((IEntity)entityEntry.Entity).Id = GenerateRandomLong();
                 ((IEntity)entityEntry.Entity).CreatedAt = now;
                 ((IEntity)entityEntry.Entity).UpdatedAt = now;
 
@@ -53,5 +55,10 @@ public class CurrencyExchangeDbcontext : DbContext
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private static long GenerateRandomLong()
+    {
+        return BitConverter.ToInt64(value: Guid.NewGuid().ToByteArray(), 0);
     }
 }

@@ -3,6 +3,7 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Currency.Exchange.Common.Cache;
 using Currency.Exchange.Common.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
@@ -40,6 +41,8 @@ public static class ConfigurationExtensions
                 x => x.MigrationsHistoryTable(tableName: "migrations_history",
                     schema: builder.Configuration.GetConnectionString(name: "Schema"))));
 
+        builder.Services.Configure<CacheConfiguration>(config: builder.Configuration.GetSection(key: "Caching"));
+
         builder.Services.AddOpenApi();
         builder.Services.AddHealthChecks();
         builder.Services.AddHttpContextAccessor();
@@ -49,5 +52,7 @@ public static class ConfigurationExtensions
             options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
+
+        builder.Services.AddSingleton<ICacheService, CacheService>();
     }
 }
