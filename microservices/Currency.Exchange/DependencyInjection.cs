@@ -31,7 +31,6 @@ public static class DependencyInjection
         });
 
         // Register fluent validators
-        services.AddValidatorsFromAssemblyContaining<CreateWalletValidator>();
         services.AddValidatorsFromAssemblyContaining<EditWalletBalanceValidator>();
         services.AddValidatorsFromAssemblyContaining<GetWalletBalanceValidator>();
 
@@ -50,5 +49,8 @@ public static class DependencyInjection
         });
 
         services.AddQuartzHostedService();
+
+        // Add services
+        services.AddTransient<CreateWalletHandler>();
     }
 }
