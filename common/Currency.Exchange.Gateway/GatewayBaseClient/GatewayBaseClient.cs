@@ -2,6 +2,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 using Currency.Exchange.Common.Cache;
 using Currency.Exchange.Gateway.Configuration;
 using Microsoft.Extensions.Options;
@@ -11,45 +12,32 @@ namespace Currency.Exchange.Gateway.GatewayBaseClient;
 
 public interface IGatewayBaseClient
 {
-    Task<GatewayClientResult<T>> GetCachedOrGetFromService<T>(
+    Task<GatewayClientResult<T>> GetXmlFromService<T>(
         string requestUri,
-        string cacheKey,
         CancellationToken cancellationToken = default);
+
+    public GatewayClientConfiguration Configuration { get; }
 }
 
 public class GatewayBaseClient : IGatewayBaseClient
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    };
-
     private readonly HttpClient _httpClient;
-    private readonly ICacheService _cacheService;
+    private readonly IOptionsSnapshot<GatewayClientConfiguration> _configuration;
     private readonly ILogger _logger = Log.ForContext<GatewayBaseClient>();
 
-    public GatewayBaseClient(HttpClient httpClient, ICacheService cacheService)
+    public GatewayBaseClient(HttpClient httpClient, IOptionsSnapshot<GatewayClientConfiguration> configuration)
     {
         _httpClient = httpClient;
-        _cacheService = cacheService;
+        _configuration = configuration;
     }
 
-    public async Task<GatewayClientResult<T>> GetCachedOrGetFromService<T>(
-        string requestUri, string cacheKey, CancellationToken cancellationToken = default)
+    public GatewayClientConfiguration Configuration => _configuration.Value;
+
+    public async Task<GatewayClientResult<T>> GetXmlFromService<T>(
+        string requestUri, CancellationToken cancellationToken = default)
     {
-        var cachedData = await _cacheService.GetFromCacheAsync<T>(key: cacheKey);
-
-        if (cachedData != null)
-        {
-            return new GatewayClientResult<T>
-            {
-                IsSuccessful = true,
-                Data = cachedData,
-            };
-        }
-
         var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
         string? responseText = null;
 
         try
@@ -59,9 +47,7 @@ public class GatewayBaseClient : IGatewayBaseClient
 
             if (response.IsSuccessStatusCode)
             {
-                var responseData = JsonSerializer.Deserialize<T>(responseText, JsonOptions);
-
-                await _cacheService.Set<T>(cacheKey, data: responseData!);
+                var responseData = await DeserializeXml<T>(responseText);
 
                 return new GatewayClientResult<T>
                 {
@@ -69,6 +55,11 @@ public class GatewayBaseClient : IGatewayBaseClient
                     Data = responseData,
                 };
             }
+
+            _logger.Error(
+                messageTemplate: "Sending {Method} {Uri} failed with empty response",
+                message.Method,
+                message.RequestUri);
 
             return new GatewayClientResult<T>
             {
@@ -88,5 +79,14 @@ public class GatewayBaseClient : IGatewayBaseClient
                 IsSuccessful = false,
             };
         }
+    }
+
+    private async Task<T> DeserializeXml<T>(string xml)
+    {
+        using var reader = new StringReader(xml);
+
+        var serializer = new XmlSerializer(type: typeof(T));
+
+        return ((T)serializer.Deserialize(reader)!)!;
     }
 }

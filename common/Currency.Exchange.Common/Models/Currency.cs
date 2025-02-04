@@ -11,7 +11,7 @@ public class Currency : IEntity
 {
     public required long Id { get; set; }
     public DateTime XmlLastUpdateDate { get; set; }
-    public CurrenciesRatesDto? CurrenciesRates { get; set; }
+    public List<RatesDto>? CurrenciesRates { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
@@ -26,7 +26,7 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
             .HasColumnType("jsonb")
             .HasConversion(
                 j => JsonSerializer.Serialize(j, (JsonSerializerOptions)null!),
-                j => JsonSerializer.Deserialize<CurrenciesRatesDto>(j, (JsonSerializerOptions)null!)
+                j => JsonSerializer.Deserialize<List<RatesDto>>(j, (JsonSerializerOptions)null!)
             );
     }
 }

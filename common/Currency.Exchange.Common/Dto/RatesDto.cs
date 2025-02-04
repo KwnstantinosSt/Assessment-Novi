@@ -5,5 +5,5 @@ namespace Currency.Exchange.Common.Dto;
 public class RatesDto
 {
     public string Currency { get; set; } = string.Empty;
-    public string Rate { get; set; } = string.Empty;
+    public decimal Rate { get; set; }
 }

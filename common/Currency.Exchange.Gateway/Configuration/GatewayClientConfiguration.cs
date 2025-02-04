@@ -4,5 +4,5 @@ namespace Currency.Exchange.Gateway.Configuration;
 
 public class GatewayClientConfiguration
 {
-    public string GatewayClientBaseUrl { get; init; } = string.Empty;
+    public string GetEuropaUrl { get; set; } = string.Empty;
 }

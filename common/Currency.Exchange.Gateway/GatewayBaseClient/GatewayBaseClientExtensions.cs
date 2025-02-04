@@ -1,5 +1,6 @@
 // Copyright © 2025 Konstantinos Stougiannou
 
+using Currency.Exchange.Gateway.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;

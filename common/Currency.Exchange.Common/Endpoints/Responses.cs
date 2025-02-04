@@ -13,6 +13,18 @@ public record SuccessfulResponse(string Code = "200", string Message = "All good
     public string Message { get; } = Message;
 }
 
+public record SuccessfulResponseWithData<T>(T? Data, string Code = "200", string Message = "All good")
+{
+    [Description(description: "Always \"200\" on success")]
+    public string Code { get; } = Code;
+
+    [Description(description: "Informative description of the result")]
+    public string Message { get; } = Message;
+
+    [Description(description: "Generic result data")]
+    public T? Data { get; } = Data;
+}
+
 public record ErrorResponse
 {
     [Description(description: "The error code returned.")]

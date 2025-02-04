@@ -6,6 +6,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.SetupMicroservices();
+
 builder.Services.AddDependencies(builder.Configuration);
 
 var app = builder.Build();

@@ -57,7 +57,7 @@ public class CurrencyExchangeDbcontext : DbContext
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    private static long GenerateRandomLong()
+    private long GenerateRandomLong()
     {
         return BitConverter.ToInt64(value: Guid.NewGuid().ToByteArray(), 0);
     }

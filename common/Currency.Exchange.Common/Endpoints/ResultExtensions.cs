@@ -11,6 +11,9 @@ public static class ResultExtensions
     public static Ok<SuccessfulResponse> Success(this IResultExtensions resultExtensions) =>
         TypedResults.Ok(value: new SuccessfulResponse());
 
+    public static Ok<SuccessfulResponseWithData<T>> SuccessWithData<T>(this IResultExtensions resultExtensions, T data) =>
+        TypedResults.Ok(value: new SuccessfulResponseWithData<T>(data));
+
     public static Ok<SuccessfulResponse> Success(this IResultExtensions resultExtensions, string message) =>
         TypedResults.Ok(value: new SuccessfulResponse(message));
 
