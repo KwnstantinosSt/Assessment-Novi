@@ -1,7 +1,7 @@
 services:
 
     db:
-        image: postgres:12.1
+        image: postgres:15.1
         container_name: currency_exchange_db
         ports:
             - "4699:5432"
@@ -27,3 +27,7 @@ services:
 
 networks:
     currencyExchange:
+
+
+volumes:
+    postgres_data:

@@ -1,16 +1,10 @@
 services:
 
     db:
-        image: postgres:12.1
+        image: postgres:15.1
         container_name: currency_exchange_db
         ports:
             - "4699:5432"
-        networks:
-            - currencyExchange
-
-    redis:
-        container_name: currency_exchange_redis
-        image: redis:5.0.7
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
@@ -19,6 +13,13 @@ services:
         volumes:
             - postgres_data:/var/lib/postgresql/data
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+        restart: always
+
+    redis:
+        container_name: currency_exchange_redis
+        image: redis:5.0.7
+        networks:
+            - currencyExchange
         ports:
             - "8537:6379"
         restart: always
@@ -26,3 +27,7 @@ services:
 
 networks:
     currencyExchange:
+
+
+volumes:
+    postgres_data:

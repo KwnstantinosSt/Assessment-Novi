@@ -43,11 +43,12 @@ public static class DependencyInjection
                 .AddTrigger(trigger =>
                     trigger.ForJob(jobKey)
                         .WithSimpleSchedule(schedule =>
-                            schedule.WithIntervalInMinutes(minutes: Convert.ToInt32(value: configuration[key: "BackgroundJobs:GatewayBackgroundJobIntervalInMinutes"])).RepeatForever()));
+                            schedule.WithIntervalInMinutes(minutes:
+                                    Convert.ToInt32(value:
+                                        configuration[key: "BackgroundJobs:GatewayBackgroundJobIntervalInMinutes"]))
+                                .RepeatForever()));
         });
 
         services.AddQuartzHostedService();
-
-        // Resister services
     }
 }
