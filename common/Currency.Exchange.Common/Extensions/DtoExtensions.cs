@@ -11,7 +11,7 @@ public static class DtoExtensions
         return new Models.Currency
         {
             Id = ratesDto.Id,
-            XmlLastUpdateDate = ratesDto.XmlLastUpdateDate,
+            XmlLastUpdateDate = DateTime.SpecifyKind(ratesDto.XmlLastUpdateDate, DateTimeKind.Utc),
             CurrenciesRates = ratesDto.CurrenciesRates,
         };
     }

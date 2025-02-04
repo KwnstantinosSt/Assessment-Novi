@@ -45,8 +45,8 @@ public class CurrencyExchangeDbcontext : DbContext
             if (entityEntry.State == EntityState.Added)
             {
                 ((IEntity)entityEntry.Entity).Id = GenerateRandomLong();
-                ((IEntity)entityEntry.Entity).CreatedAt = now;
-                ((IEntity)entityEntry.Entity).UpdatedAt = now;
+                ((IEntity)entityEntry.Entity).CreatedAt = DateTime.SpecifyKind(now, DateTimeKind.Utc);
+                ((IEntity)entityEntry.Entity).UpdatedAt = DateTime.SpecifyKind(now, DateTimeKind.Utc);
 
                 continue;
             }
