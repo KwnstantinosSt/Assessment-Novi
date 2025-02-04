@@ -53,6 +53,6 @@ public static class ConfigurationExtensions
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
 
-        builder.Services.AddSingleton<ICacheService, CacheService>();
+        builder.Services.AddScoped<ICacheService, CacheService>();
     }
 }

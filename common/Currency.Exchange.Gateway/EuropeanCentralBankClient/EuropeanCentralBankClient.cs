@@ -18,7 +18,8 @@ public class EuropeanCentralBankClient : IEuropeanCentralBankClient
     private readonly IOptionsSnapshot<GatewayClientConfiguration> _configuration;
     private readonly ILogger _logger = Log.ForContext<EuropeanCentralBankClient>();
 
-    public EuropeanCentralBankClient(IGatewayBaseClient baseClient, IOptionsSnapshot<GatewayClientConfiguration> configuration)
+    public EuropeanCentralBankClient(IGatewayBaseClient baseClient,
+                                     IOptionsSnapshot<GatewayClientConfiguration> configuration)
     {
         _baseClient = baseClient;
         _configuration = configuration;

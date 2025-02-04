@@ -4,7 +4,7 @@ namespace Currency.Exchange.Common.Cache;
 
 public class CacheConfiguration
 {
-    public required string Namespace { get; set; }
+    public required string Namespace { get; init; }
 
-    public TimeSpan? ExpirationInSeconds { get; set; }
+    public TimeSpan? ExpirationInSeconds { get; init; }
 }
