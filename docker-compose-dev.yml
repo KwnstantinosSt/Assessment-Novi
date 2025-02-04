@@ -11,10 +11,17 @@ services:
     redis:
         container_name: currency_exchange_redis
         image: redis:5.0.7
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
         networks:
             - currencyExchange
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - "8537:6379"
+        restart: always
 
 
 networks:
