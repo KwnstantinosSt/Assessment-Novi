@@ -12,7 +12,7 @@ public class GetWalletBalanceEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("v1/getWallet/{walletId}", GetWallet)
+        app.MapGet("api/wallets/{walletId}", GetWallet)
             .WithDescription("Gets a wallet with {id} and converts to a specific {currency} returning the balance")
             .WithSummary(summary: "Gets a wallet balace to any currency")
             .WithName(endpointName: "GetWalletBalance")

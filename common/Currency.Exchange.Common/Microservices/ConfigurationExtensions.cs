@@ -23,6 +23,8 @@ public static class ConfigurationExtensions
         {
             config.ReadFrom.Configuration(builder.Configuration);
         });
+        
+        builder.Services.AddMemoryCache();
 
         builder.Configuration
             .SetBasePath(basePath: Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!)

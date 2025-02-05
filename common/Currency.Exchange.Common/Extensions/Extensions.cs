@@ -18,7 +18,7 @@ public static class Extensions
         {
             var targetCurrencyRate = rates.FirstOrDefault(r => r.Currency == currency.ToUpper())!.Rate;
 
-            return amount * targetCurrencyRate;
+            return Math.Round(d: amount * targetCurrencyRate, decimals: 2);
         }
 
         throw new ArgumentException(message: $"Unsupported currency: {currency}");
@@ -31,7 +31,7 @@ public static class Extensions
         {
             var targetCurrencyRate = rates.FirstOrDefault(r => r.Currency == currency.ToUpper())!.Rate;
 
-            return amount / targetCurrencyRate;
+            return Math.Round(d: amount / targetCurrencyRate, decimals: 2);
         }
 
         throw new ArgumentException(message: $"Unsupported currency: {currency}");

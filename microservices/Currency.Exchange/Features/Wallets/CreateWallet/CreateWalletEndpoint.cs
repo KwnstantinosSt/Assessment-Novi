@@ -11,7 +11,7 @@ public class CreateWalletEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(pattern: "v1/createWallet", CreateWallet)
+        app.MapPost(pattern: "api/wallets", CreateWallet)
             .WithDescription("Creates a new wallet")
             .WithSummary(summary: "Creates a wallet")
             .WithName(endpointName: "CreateWallet")
