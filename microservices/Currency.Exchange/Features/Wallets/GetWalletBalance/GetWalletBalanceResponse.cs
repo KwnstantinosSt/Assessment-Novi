@@ -6,5 +6,6 @@ namespace Currency.Exchange.Features.Wallets.GetWalletBalance;
 
 public record GetWalletBalanceResponse : SuccessfulResponse
 {
-
+    public string Currency { get; set; }
+    public decimal Balance { get; set; }
 }

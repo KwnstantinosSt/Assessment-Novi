@@ -26,7 +26,7 @@ public class CreateWalletEndpoint : IEndpoint
 
         if (!errorResponse.IsSuccessful)
         {
-            TypedResults.Extensions.BadRequest(message: errorResponse.Message!);
+            return TypedResults.Extensions.BadRequest(message: errorResponse.Message!);
         }
 
         return TypedResults.Extensions.Success(response: handlerResponse);
