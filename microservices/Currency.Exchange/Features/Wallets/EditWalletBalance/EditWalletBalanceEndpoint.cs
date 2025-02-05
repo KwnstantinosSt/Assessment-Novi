@@ -9,7 +9,7 @@ namespace Currency.Exchange.Features.Wallets.EditWalletBalance;
 
 public class EditWalletBalanceEndpoint : IEndpoint
 {
-    private readonly List<string> _strategies = new() { "AddFundsStrategy", "SubtractFundsStrategy", "ForceSubstractFundsStrategy" };
+    private readonly List<string> _strategies = new() { "ADDFUNDSSTRATEGY", "SUBSTRACTFUNDSSTRATEGY", "FORECESUBSTRACTFUNDSSTRATEGY" };
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("api/wallets/ajustbalance/{walletId}", EditWallet)
@@ -33,7 +33,7 @@ public class EditWalletBalanceEndpoint : IEndpoint
         if (amount <= 0)
             return TypedResults.Extensions.BadRequest("Amount must be greater than 0");
 
-        if (!(_strategies.Any(s => s.ToUpper() == strategy.ToUpper())))
+        if (!(_strategies.Contains(strategy.ToUpper())))
         {
             return TypedResults.Extensions.BadRequest("Strategy does not exists");
         }

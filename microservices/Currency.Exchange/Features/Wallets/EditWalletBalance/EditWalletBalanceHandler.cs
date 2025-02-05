@@ -4,6 +4,7 @@ using Currency.Exchange.Common.Cache;
 using Currency.Exchange.Common.Database;
 using Currency.Exchange.Common.Dto;
 using Currency.Exchange.Common.Extensions;
+using Currency.Exchange.Common.Models;
 using Currency.Exchange.Features.Wallets.GetWalletBalance;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -20,12 +21,15 @@ public class EditWalletBalanceHandler(CurrencyExchangeDbcontext dbContext, ICach
         try
         {
             var wallet = await dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
-            decimal responseAmount = 0;
 
             if (wallet is null)
             {
                 return (new EditWalletBalanceResponse(), new ErrorResponse { IsSuccessful = false, Message = "Wallet not found.", });
             }
+
+            var (response, error) = await BalanceTransaction(wallet: wallet, amount: amount, strategy: strategy);
+
+            decimal responseAmount;
 
             if (wallet.Currency.ToUpper() != currency.ToUpper())
             {
@@ -69,9 +73,9 @@ public class EditWalletBalanceHandler(CurrencyExchangeDbcontext dbContext, ICach
 
                     dbContext.Wallets.Update(wallet);
                 }
-
-                await dbContext.SaveChangesAsync();
             }
+
+            await dbContext.SaveChangesAsync();
 
             return (new EditWalletBalanceResponse
             {
@@ -87,4 +91,43 @@ public class EditWalletBalanceHandler(CurrencyExchangeDbcontext dbContext, ICach
         }
     }
 
+
+    private async Task<(Wallet, ErrorResponse)> BalanceTransaction(
+        Wallet wallet, string strategy, decimal amount)
+    {
+        try
+        {
+            switch (strategy.ToUpper())
+            {
+                case "ADDFUNDSSTRATEGY":
+                    wallet.Balance += amount;
+                    break;
+
+                case "SUBSTRACTFUNDSSTRATEGY":
+                    if (wallet.Balance < amount)
+                    {
+                        return (wallet,
+                            new ErrorResponse { IsSuccessful = false, Message = "Insufficient funds in the wallet.", });
+                    }
+
+                    wallet.Balance -= amount;
+                    break;
+
+                case "FORCESUBSTRACTFUNDSSTRATEGY":
+                    wallet.Balance -= amount;
+                    break;
+
+                default:
+                    return (wallet,
+                        new ErrorResponse { IsSuccessful = false, Message = "Insufficient funds in the wallet.", });
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e, messageTemplate: "Error converting wallet balance");
+        }
+
+        return (wallet,
+            new ErrorResponse { IsSuccessful = true, });
+    }
 }
