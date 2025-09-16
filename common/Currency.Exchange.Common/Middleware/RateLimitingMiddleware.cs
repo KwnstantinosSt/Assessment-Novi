@@ -2,6 +2,7 @@
 
 
 using System.Collections.Concurrent;
+using Currency.Exchange.Common.Endpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -47,7 +48,13 @@ public class RateLimitingMiddleware
         if (_requestCounts[ip] > _requestLimit)
         {
             context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-            await context.Response.WriteAsync("Too many requests. Try again later.");
+
+            await context.Response.WriteAsJsonAsync(value: new ErrorResponse
+            {
+                Message = "Too many requests!",
+                Code = "400",
+            });
+
             return;
         }
 

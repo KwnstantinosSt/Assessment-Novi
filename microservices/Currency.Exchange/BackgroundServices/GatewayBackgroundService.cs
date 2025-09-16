@@ -6,6 +6,7 @@ using Currency.Exchange.Common.Database;
 using Currency.Exchange.Common.Extensions;
 using Currency.Exchange.Gateway.EuropeanCentralBankClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using NpgsqlTypes;
 using Quartz;
@@ -20,14 +21,17 @@ public class GatewayBackgroundService : IJob
     private readonly CurrencyExchangeDbcontext _context;
     private readonly ICacheService _cacheService;
     private readonly IEuropeanCentralBankClient _client;
+    private readonly IOptionsSnapshot<CacheConfiguration> _cacheOptions;
 
     public GatewayBackgroundService(CurrencyExchangeDbcontext context,
                                     ICacheService cacheService,
-                                    IEuropeanCentralBankClient client)
+                                    IEuropeanCentralBankClient client,
+                                    IOptionsSnapshot<CacheConfiguration> cacheOptions)
     {
         _context = context;
         _cacheService = cacheService;
         _client = client;
+        _cacheOptions = cacheOptions;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -75,7 +79,7 @@ public class GatewayBackgroundService : IJob
                 // Save to db
                 await _context.Database.ExecuteSqlRawAsync(sql, parameters: parameters.Cast<object>().ToArray());
                 // Set latest update to cache
-                await _cacheService.Set(key: "latest_rates", response.Data);
+                await _cacheService.Set(key: _cacheOptions.Value.CachingKeys[key: "CurrenciesKey"], response.Data);
                 _logger.Information(messageTemplate: "Data updated successfully db and cache");
 
                 return;
