@@ -19,6 +19,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<RateLimitingMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.MapHealthChecks(pattern: "/health");
 app.MapMinimalEndpoints();

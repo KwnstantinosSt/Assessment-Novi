@@ -8,6 +8,7 @@ using Currency.Exchange.Features.Wallets.GetWalletBalance;
 using Currency.Exchange.Gateway.Configuration;
 using Currency.Exchange.Gateway.EuropeanCentralBankClient;
 using Currency.Exchange.Gateway.GatewayBaseClient;
+using Currency.Exchange.Services;
 using FluentValidation;
 using Quartz;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -52,5 +53,6 @@ public static class DependencyInjection
         services.AddTransient<CreateWalletHandler>();
         services.AddTransient<GetWalletBalanceHandler>();
         services.AddTransient<EditWalletBalanceHandler>();
+        services.AddTransient<ICurrencyExchangeService, CurrencyExchangeService>();
     }
 }

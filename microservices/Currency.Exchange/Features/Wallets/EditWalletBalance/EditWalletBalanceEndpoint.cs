@@ -9,7 +9,9 @@ namespace Currency.Exchange.Features.Wallets.EditWalletBalance;
 
 public class EditWalletBalanceEndpoint : IEndpoint
 {
-    private readonly List<string> _strategies = new() { "ADDFUNDSSTRATEGY", "SUBSTRACTFUNDSSTRATEGY", "FORECESUBSTRACTFUNDSSTRATEGY" };
+    private readonly List<string> _strategies =
+        ["ADDFUNDSSTRATEGY", "SUBSTRACTFUNDSSTRATEGY", "FORCESUBSTRACTFUNDSSTRATEGY",];
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("api/wallets/ajustbalance/{walletId}", EditWallet)
@@ -25,6 +27,7 @@ public class EditWalletBalanceEndpoint : IEndpoint
         [FromQuery] decimal amount,
         [FromQuery] string strategy,
         [FromServices] EditWalletBalanceHandler handler,
+        CancellationToken cancellationToken,
         [FromQuery] string? currency = "EUR")
     {
         if (walletId == 0)
@@ -33,7 +36,7 @@ public class EditWalletBalanceEndpoint : IEndpoint
         if (amount <= 0)
             return TypedResults.Extensions.BadRequest("Amount must be greater than 0");
 
-        if (!(_strategies.Contains(strategy.ToUpper())))
+        if (!(_strategies.Contains(item: strategy.ToUpper())))
         {
             return TypedResults.Extensions.BadRequest("Strategy does not exists");
         }
@@ -41,7 +44,7 @@ public class EditWalletBalanceEndpoint : IEndpoint
         if (string.IsNullOrEmpty(currency))
             return TypedResults.Extensions.BadRequest(message: "Currency is required");
 
-        var (handlerResponse, errorResponse) = await handler.Handle(walletId, currency, strategy, amount);
+        var (handlerResponse, errorResponse) = await handler.Handle(walletId, currency, strategy, amount, cancellationToken);
 
         if (!errorResponse.IsSuccessful)
         {

@@ -14,7 +14,7 @@ public static class Extensions
     // Method to convert from Euro to another currency
     public static decimal ConvertFromEuro(decimal amount, string currency, List<RatesDto> rates)
     {
-        if (rates.Any(r => r.Currency == currency.ToUpper()))
+        if (rates.Any(r => r.Currency.ToUpper() == currency.ToUpper()))
         {
             var targetCurrencyRate = rates.FirstOrDefault(r => r.Currency == currency.ToUpper())!.Rate;
 
@@ -27,7 +27,7 @@ public static class Extensions
     // Method to convert from another currency to Euro
     public static decimal ConvertToEuro(decimal amount, string currency, List<RatesDto> rates)
     {
-        if (rates.Any(r => r.Currency == currency.ToUpper()))
+        if (rates.Any(r => r.Currency.ToUpper() == currency.ToUpper()))
         {
             var targetCurrencyRate = rates.FirstOrDefault(r => r.Currency == currency.ToUpper())!.Rate;
 

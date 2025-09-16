@@ -21,23 +21,24 @@ public class GetWalletBalanceEndpoint : IEndpoint
     }
 
     public async Task<Results<Ok<GetWalletBalanceResponse>, BadRequest<ErrorResponse>>> GetWallet(
-        [FromRoute] int walletId,
+        [FromRoute] int? walletId,
+        CancellationToken cancellationToken,
         [FromServices] GetWalletBalanceHandler handler,
         [FromQuery] string? currency = "EUR")
     {
-        if (walletId == 0)
-            return TypedResults.Extensions.BadRequest("Wallet id is required");
+        if (walletId == 0 || walletId == null)
+            return TypedResults.Extensions.BadRequest(message: "Wallet id is required");
 
         if (string.IsNullOrEmpty(currency))
             return TypedResults.Extensions.BadRequest(message: "Currency is required");
 
-        var (handlerResponse, errorResponse) = await handler.Handle(walletId, currency);
+        var (handlerResponse, errorResponse) = await handler.Handle(walletId: (int)walletId!, currency, cancellationToken);
 
         if (!errorResponse.IsSuccessful)
         {
             return TypedResults.Extensions.BadRequest(message: errorResponse.Message!);
         }
 
-        return TypedResults.Extensions.Success(response: handlerResponse);
+        return TypedResults.Extensions.Success(response: handlerResponse!);
     }
 }
